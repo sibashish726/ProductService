@@ -1,12 +1,15 @@
 package com.example.product.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.product.entity.Product;
 import com.example.product.model.ProductRequest;
+import com.example.product.model.ProductResponse;
 import com.example.product.repository.ProductRepo;
 
+import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -28,6 +31,16 @@ public class ProductServiceImpl implements ProductService {
 		produRepo.save(product);
 		log.info("product added");
 		return product.getProductId();
+	}
+
+	@Override
+	public ProductResponse getProductById(long productId) {
+		log.info("Get product for Product id: "+productId);
+		Product product= produRepo.findById(productId)
+				        .orElseThrow(() ->new RuntimeException("Product not found with id"));
+		ProductResponse productResponse= new ProductResponse();
+		BeanUtils.copyProperties(product, productResponse);
+		return productResponse;
 	}
 
 }
