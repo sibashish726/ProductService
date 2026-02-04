@@ -10,7 +10,6 @@ import com.example.product.model.ProductRequest;
 import com.example.product.model.ProductResponse;
 import com.example.product.repository.ProductRepo;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.extern.log4j.Log4j2;
 
 @Service
