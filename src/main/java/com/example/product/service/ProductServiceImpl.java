@@ -2,6 +2,7 @@ package com.example.product.service;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.product.entity.Product;
@@ -17,7 +18,7 @@ import lombok.extern.log4j.Log4j2;
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
-	private ProductRepo produRepo;
+	private ProductRepo productRepo;
 	
 	@Override
 	public long addProduct(ProductRequest productRequest) {
@@ -28,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 				                 .quantity(productRequest.getQuantity())
 				                 .price(productRequest.getPrice())
 				                 .build();
-		produRepo.save(product);
+		productRepo.save(product);
 		log.info("product added");
 		return product.getProductId();
 	}
@@ -36,11 +37,26 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductResponse getProductById(long productId) {
 		log.info("Get product for Product id: "+productId);
-		Product product= produRepo.findById(productId)
+		Product product= productRepo.findById(productId)
 				        .orElseThrow(() ->new ProductServiceCustomException("Product not found with id "+productId,"PRODUCT_NOT_FOUND"));
 		ProductResponse productResponse= new ProductResponse();
 		BeanUtils.copyProperties(product, productResponse);
 		return productResponse;
+	}
+
+	@Override
+	public void reduceQuantity(long productId, long quantity) {
+		// TODO Auto-generated method stub
+		log.info("Reduce quantity of "+quantity +" for product: "+productId);
+		Product product= productRepo.findById(productId)
+		        .orElseThrow(() ->new ProductServiceCustomException("Product not found with id "+productId,"PRODUCT_NOT_FOUND"));
+        
+		if(product.getQuantity()< quantity) {
+        	throw new ProductServiceCustomException("Product doesn't have sufficient quantity ","INSUFFICIENT_QUANTITY");
+        }
+		product.setQuantity(product.getQuantity() - quantity);
+		productRepo.save(product);
+		log.info("Product quantity updated successfully");
 	}
 
 }
