@@ -2,6 +2,7 @@ package com.example.product.service;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +59,41 @@ public class ProductServiceImpl implements ProductService {
 		productRepo.save(product);
 		log.info("Product quantity updated successfully");
 	}
+
+	@Override
+	public void deleteProductById(long productId) {
+		log.info("Delete Product for Product id: " + productId);
+	    try {
+	        productRepo.deleteById(productId);
+	        log.info("Product deleted successfully with id: " + productId);
+	    } catch (Exception e) {
+	        log.error("Error occurred while deleting product: " + e.getMessage());
+	        throw new ProductServiceCustomException(
+	                "Product with id " + productId + " not found",
+	                "PRODUCT_NOT_FOUND"
+	        );
+	    }
+		
+	}
+
+	@Override
+	public Page<ProductResponse> getAllProducts(int pageNumber, int pageSize) {
+		log.info("Fetching all products with pageNumber: {} and pageSize: {}", pageNumber, pageSize);
+	    
+	    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+	    Page<Product> productPage = productRepo.findAll(pageable);
+	    
+
+	    Page<ProductResponse> productResponsePage = productPage.map(product -> {
+	        ProductResponse productResponse = new ProductResponse();
+	        BeanUtils.copyProperties(product, productResponse);
+	        return productResponse;
+	    });
+	    
+	    log.info("Successfully fetched products");
+	    return productResponsePage;
+	}
+	
+	
 
 }
