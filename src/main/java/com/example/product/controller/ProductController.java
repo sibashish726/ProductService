@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +27,13 @@ public class ProductController {
    @Autowired
    private ProductService productService;
    
+
    @PostMapping("/addProduct")
    public ResponseEntity<Long> addProduct(@RequestBody ProductRequest productRequest){
 	   long productId= productService.addProduct(productRequest);
 	   return new ResponseEntity<Long>(productId, HttpStatus.CREATED);
    }
+   
    
    @GetMapping("/getProductById/{id}")
    public ResponseEntity<ProductResponse> getProductById(@PathVariable("id") long productId){
@@ -38,17 +41,21 @@ public class ProductController {
 	   return new ResponseEntity<>(productResponse, HttpStatus.OK);
    }
    
+ 
    @PutMapping("/reduceQuantity/{id}")
    public ResponseEntity<Void> reduceQuantity(@PathVariable("id") long productId, @RequestParam long quantity){
 	   productService.reduceQuantity(productId,quantity);
 	   return new ResponseEntity<>(HttpStatus.OK);
 	   
    }
+   
    @DeleteMapping("/deleteProduct/{id}")
    public ResponseEntity<Void> deleteProductById(@PathVariable("id") long productId) {
        productService.deleteProductById(productId);
        return new ResponseEntity<>(HttpStatus.OK);
    }
+   
+
    @GetMapping("/getAllProducts")
    public ResponseEntity<Page<ProductResponse>> getAllProducts(
            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
