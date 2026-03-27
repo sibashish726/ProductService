@@ -1,7 +1,7 @@
 # ProductService Microservices
 
 ## Overview
-This project is an implementation of an Invoice management system. It includes core functionalities such as invoice creation, retrieval, update, deletion, status management, and filtering. The system is built using an in-memory H2 database but can be easily connected to MySQL or any other relational database.
+ProductService is one of the services of an ShoppingCart system. It includes core functionalities such as product creation, retrieval, update, deletion,and filtering. The system is built using  MySQL can be migrated to any other relational database.
 
 
 # High Level Design 
@@ -19,30 +19,17 @@ This project is an implementation of an Invoice management system. It includes c
 
 ## Features Implemented
 
-1. **Invoice Creation**
-    - Create a new invoice with product details, quantity, and amount
-    - Auto-assigns status as `CREATED` and timestamps the invoice
+1. **Product Creation**
+    - Create a new product details, quantity, and amount
 
-2. **Invoice Retrieval**
-    - Get all invoices
-    - Get a specific invoice by ID
+2. **Product Retrieval**
+    - Get all Product
+    - Get a specific Product by ID
 
-3. **Invoice Update**
-    - Update invoice details (amount, product details, product ID, quantity)
-    - Update invoice status independently via PATCH endpoint
-
-4. **Invoice Deletion**
+3.  **Product Deletion**
     - Delete a specific invoice by ID
-    - Delete all invoices (bulk delete)
 
-5. **Invoice Filtering**
-    - Filter invoices by status
-    - Filter invoices by product ID
-
-6. **Additional Operations**
-    - Get total invoice count
-
-7. **Error Handling**
+4. **Error Handling**
     - Custom exception handling with global exception handler
     - Structured error responses with error codes and HTTP status mapping
 
@@ -54,8 +41,8 @@ This project is an implementation of an Invoice management system. It includes c
 
 1. **Clone the Repository:**
    ```sh
-   git clone https://github.com/sibashish726/InvoiceService.git
-   cd InvoiceService
+   git clone https://github.com/sibashish726/ProductService.git
+   cd ProductService
    ```
 
 2. **Build the Application:**
@@ -67,130 +54,103 @@ This project is an implementation of an Invoice management system. It includes c
    ```sh
    ./mvnw spring-boot:run
    ```
-   The application starts on **port 8090**.
+   The application starts on **port 8080**.
 
-4. **Access the H2 Database Console:**
-   - URL: [http://localhost:8090/h2-console](http://localhost:8090/h2-console)
-   - JDBC URL: `jdbc:h2:mem:inoice_db`
-   - Username: Set your own username in application.properties 
-   - Password: Set your own password in application.properties 
+4. **Access the My Database Console:**
+   -JDBC URL: `jdbc:mysql://${DB_HOST:localhost}:3306/productdb`
+   - Username: Set your own username in application.yaml 
+   - Password: Set your own password in application.yaml 
 
 ## API Endpoints
 
-Base path: `/v1/invoice`
+Base path: `/product`
+### Product Management API
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/v1/invoice/home` | Home page |
-| POST | `/v1/invoice/saveInvoice` | Create a new invoice |
-| GET | `/v1/invoice/getAllInvoices` | Get all invoices |
-| GET | `/v1/invoice/getInvoiceById/{invoiceId}` | Get invoice by ID |
-| PUT | `/v1/invoice/updateInvoice/{invoiceId}` | Update an invoice |
-| DELETE | `/v1/invoice/deleteInvoiceById/{invoiceId}` | Delete an invoice by ID |
-| GET | `/v1/invoice/getInvoicesByStatus/{status}` | Get invoices by status |
-| GET | `/v1/invoice/getInvoicesByProductId/{productId}` | Get invoices by product ID |
-| PATCH | `/v1/invoice/updateInvoiceStatus/{invoiceId}` | Update invoice status |
-| GET | `/v1/invoice/count` | Get total invoice count |
-| DELETE | `/v1/invoice/deleteAllInvoices` | Delete all invoices |
+| POST | `/product/addProduct` | Create and save a new product |
+| GET | `/product/getProductById/{id}` | Get product details by ID |
+| PUT | `/product/reduceQuantity/{id}` | Reduce the quantity of a specific product |
+| DELETE | `/product/deleteProduct/{id}` | Delete a product by ID |
+| GET | `/product/getAllProducts` | Get all products with pagination |
+
+---
 
 ### Request/Response Examples
 
-- **Create Invoice:**
+- **Add Product:**
   ```http
-  POST /v1/invoice/saveInvoice
+  POST /product/addProduct
   ```
   **Request Body:**
   ```json
   {
-    "productId": "105",
-    "productDetails": "High-performance iPhone",
-    "quantity": 2,
-    "amount": 40000
+    "productName": "iPhone 15 Pro",
+    "price": 99900,
+    "quantity": 50
   }
   ```
-  **Response:** `201 Created` with the invoice ID.
+  **Response:** `201 Created` with the product ID.
 
-- **Update Invoice:**
+- **Get Product by ID:**
   ```http
-  PUT /v1/invoice/updateInvoice/{invoiceId}
-  ```
-  **Request Body:**
-  ```json
-  {
-    "productId": "105",
-    "productDetails": "iPhone 15 Pro - Titanium (Updated)",
-    "quantity": 1,
-    "amount": 45000
-  }
-  ```
-  **Response:** `200 OK`
-
-- **Update Invoice Status:**
-  ```http
-  PATCH /v1/invoice/updateInvoiceStatus/{invoiceId}?status=PAID
-  ```
-  **Response:** `200 OK`
-
-- **Delete Invoice:**
-  ```http
-  DELETE /v1/invoice/deleteInvoiceById/{invoiceId}
-  ```
-  **Response:** `204 No Content`
-
-- **Get Invoice by ID:**
-  ```http
-  GET /v1/invoice/getInvoiceById/{invoiceId}
+  GET /product/getProductById/{id}
   ```
   **Response:** `200 OK`
   ```json
   {
-    "id": 1,
-    "amount": 40000,
-    "quantity": 2,
-    "invoiceStatus": "CREATED",
-    "invoiceDate": "2024-01-15T10:30:00Z",
-    "productId": "105",
-    "productDetails": "High-performance iPhone"
+    "productId": 105,
+    "productName": "iPhone 15 Pro",
+    "price": 99900,
+    "quantity": 50
   }
   ```
 
-- **Get All Invoices:**
+- **Reduce Product Quantity:**
   ```http
-  GET /v1/invoice/getAllInvoices
+  PUT /product/reduceQuantity/{id}?quantity=5
   ```
-  **Response:** `200 OK` with a list of invoice objects.
+  **Response:** `200 OK`
 
-- **Get Invoices by Status:**
+- **Delete Product:**
   ```http
-  GET /v1/invoice/getInvoicesByStatus/{status}
+  DELETE /product/deleteProduct/{id}
   ```
-  **Response:** `200 OK` with a list of matching invoice objects.
+  **Response:** `200 OK`
 
-- **Get Invoices by Product ID:**
+- **Get All Products:**
   ```http
-  GET /v1/invoice/getInvoicesByProductId/{productId}
+  GET /product/getAllProducts?pageNumber=0&pageSize=5
   ```
-  **Response:** `200 OK` with a list of matching invoice objects.
-
-- **Get Invoice Count:**
-  ```http
-  GET /v1/invoice/count
+  **Response:** `200 OK`
+  ```json
+  {
+    "content": [
+      {
+        "productId": 105,
+        "productName": "iPhone 15 Pro",
+        "price": 99900,
+        "quantity": 45
+      }
+    ],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 5
+    },
+    "totalElements": 1,
+    "totalPages": 1,
+    "last": true
+  }
   ```
-  **Response:** `200 OK` with the total count.
-
-- **Delete All Invoices:**
-  ```http
-  DELETE /v1/invoice/deleteAllInvoices
-  ```
-  **Response:** `204 No Content`
 
 ### Error Response Format
 ```json
 {
-  "errorMessage": "Invoice with given id not found",
-  "errorCode": "INVOICE_NOT_FOUND"
+  "errorMessage": "Product with given id not found",
+  "errorCode": "PRODUCT_NOT_FOUND"
 }
 ```
+
 
 ## Database Schema
 
@@ -198,18 +158,17 @@ Base path: `/v1/invoice`
 
 | Column | Type | Description |
 |--------|------|-------------|
-| `id` | long | Auto-generated primary key |
-| `INVOICE_AMOUNT` | long | Invoice amount |
-| `PRODUCT_DETAILS` | String | Product description |
-| `PRODUCT_ID` | String | Product identifier |
-| `QUANTITY` | long | Product quantity |
-| `INVOICE_STATUS` | String | Invoice status (e.g., CREATED, PAID) |
-| `INVOICE_DATE` | Instant | Timestamp of invoice creation |
+| `PRODUCTID` | long | Auto-generated primary key |
+| `PRODUCT_NAME` | String | Name of the product|
+| `PRICE` | long | Unit price of the product |
+| `QUANTITY` | long | Available stock quantity|
+
 
 ### DTOs
-- **InvoiceRequest** – Input DTO for creating/updating invoices (amount, productDetails, productId, quantity).
-- **InvoiceResponse** – Output DTO returned by the API (includes id, invoiceStatus, invoiceDate, and all request fields).
-- **ErrorResponse** – Error DTO returned on failures (errorMessage, errorCode).
+
+- **ProductRequest** – Input DTO for creating/adding products (`name`, `price`, `quantity`).
+- **ProductResponse** – Output DTO returned by the API (includes `productId`, `productName`, `quantity`, and `price`).
+- **ErrorResponse** – Error DTO returned on failures (`errorMessage`, `errorCode`).
 
 ## Design Patterns
 
