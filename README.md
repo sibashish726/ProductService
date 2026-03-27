@@ -1,29 +1,41 @@
-# ProductService
+# Product Service Documentation
 
-## High Level Design
-
-### Overview
-The ProductService is designed to handle all product-related operations in our application. It interacts with other services for product management, ensuring seamless integration and functionality.
+## High-Level Design
+The Product Service is designed to manage products with functionalities such as CRUD operations. It utilizes Spring Boot 3.5.9, Java 17, and MySQL as the database.
 
 ### Architecture
-![ProductService Architecture](link_to_image)
+- **Microservices Architecture**: The Product Service is part of a larger microservices ecosystem that includes Eureka service discovery and Spring Cloud Config for configuration management.
+- **Service Discovery**: Eureka is used for locating services for the purpose of load balancing and failover of middle-tier servers.
 
-### Components
-1. **Product API**: Responsible for CRUD operations on products.
-2. **Database**: Stores product information persistently.
-3. **Caching Layer**: Speeds up access to frequently requested data.
-4. **Webhook Integration**: Allows communication with external services.
+## Detailed Documentation
 
-### Data Flow
-- **Client Requests**: Clients send requests to the Product API.
-- **Data Storage**: The API interacts with the database for data retrieval and storage.
-- **Response**: The API sends back the appropriate response to the client.
+### 1. Overview
+The Product Service provides a RESTful API for managing products, including creating, updating, retrieving, and deleting product entries.
 
-### Technologies Used
-- **Framework**: Node.js
-- **Database**: MongoDB
-- **Caching**: Redis
-- **Message Broker**: RabbitMQ
+### 2. Technologies Used  
+- **Spring Boot**: Framework for building the Java-based RESTful web services.  
+- **Java 17**: The programming language used.  
+- **MySQL**: The database used for persistent storage.  
+- **Eureka**: Service discovery for locating services in the architecture.  
+- **Spring Cloud Config**: Manages configurations across different environments.
 
-### Conclusion
-The ProductService is a crucial component, designed for scalability and efficiency to handle product data management.
+### 3. Endpoints
+- **GET /products**: Retrieve all products.  
+- **POST /products**: Create a new product.  
+- **GET /products/{id}**: Retrieve a product by ID.  
+- **PUT /products/{id}**: Update an existing product.  
+- **DELETE /products/{id}**: Delete a product by ID.
+
+### 4. Database Schema
+- Products Table: Contains fields such as `id`, `name`, `description`, `price`, and `quantity`.
+
+### 5. Configuration
+Configuration properties are managed via Spring Cloud Config, making it easy to configure applications in different environments without modifying the code.  
+
+### 6. Running the Application
+1. Clone the repository.  
+2. Configure the database in `application.yml`.  
+3. Run the application using your IDE or command line.
+
+### 7. Conclusion
+This Product Service acts as a vital component of the inventory management system, facilitating the efficient management of products within microservices architecture.
