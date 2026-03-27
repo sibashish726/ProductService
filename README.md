@@ -216,11 +216,8 @@ Base path: `/v1/invoice`
 6. **Singleton Pattern** – All Spring Beans (`@Service`, `@RestController`, `@Repository`) are singletons by default.
 
 ## Future Enhancements
-- Implement Microservices Communication
-- Implement API gateway integration
 - Implement role-based access control (RBAC)
 - Implement caching for performance improvement
-- Implement pagination and sorting
 - Implement Monitoring using Spring Boot Actuator + Prometheus
 - Implement Kafka for streaming and notification
 - Add Swagger/OpenAPI documentation
