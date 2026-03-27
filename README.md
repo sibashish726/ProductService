@@ -1,12 +1,17 @@
-# Product Service Microservices
+# ProductService Microservices
 
 ## Overview
 This project is an implementation of an Invoice management system. It includes core functionalities such as invoice creation, retrieval, update, deletion, status management, and filtering. The system is built using an in-memory H2 database but can be easily connected to MySQL or any other relational database.
 
+
+# High Level Design 
+
+![App Dashboard](./HLD_new.png)
+
 ## Tech Stack
 - **Framework:** Spring Boot 3.2.2
 - **Language:** Java 17
-- **Database:** H2 (in-memory, default)
+- **Database:** MySQL
 - **ORM:** Spring Data JPA / Hibernate
 - **Build Tool:** Maven
 - **Logging:** Log4j2
@@ -222,7 +227,3 @@ Base path: `/v1/invoice`
 - Implement Kafka for streaming and notification
 - Add Swagger/OpenAPI documentation
 - Add unit and integration tests
-
-# High Level Design 
-
-![App Dashboard](./HLD_new.png)
