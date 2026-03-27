@@ -222,3 +222,7 @@ Base path: `/v1/invoice`
 - Implement Kafka for streaming and notification
 - Add Swagger/OpenAPI documentation
 - Add unit and integration tests
+
+# High Level Design 
+
+![App Dashboard](./HLD_new.png)
