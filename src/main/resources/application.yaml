@@ -21,7 +21,12 @@ spring:
 
   config:
     import: configserver:http://localhost:9296
-  
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
 
 #eureka:
 #  client:
