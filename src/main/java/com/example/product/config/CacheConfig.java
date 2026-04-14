@@ -5,14 +5,15 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.CacheErrorHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableCaching
 @Log4j2
-public class CacheConfig implements CachingConfigurer { 
+public class CacheConfig { // Removed "implements CachingConfigurer"
 
-    @Override
+    @Bean
     public CacheErrorHandler errorHandler() {
         return new CacheErrorHandler() {
             @Override
