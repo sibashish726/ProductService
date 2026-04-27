@@ -5,8 +5,12 @@ ProductService is one of the services of an ShoppingCart system. It includes cor
 
 
 # High Level Design 
-
 ![App Dashboard](./HLD4.png)
+
+
+# E2E Design
+![App Dashboard](./spring_microservices_full_architecture.svg)
+
 
 ## Tech Stack
 - **Framework:** Spring Boot 3.2.2
